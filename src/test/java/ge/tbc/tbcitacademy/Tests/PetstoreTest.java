@@ -1,7 +1,7 @@
 package ge.tbc.tbcitacademy.Tests;
 
 import ge.tbc.tbcitacademy.Data.Constants;
-import ge.tbc.tbcitacademy.Steps.PetstoreSteps;
+import ge.tbc.tbcitacademy.Steps.PetstoreSteps.PetstoreSteps;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

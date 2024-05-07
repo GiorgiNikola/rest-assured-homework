@@ -1,4 +1,4 @@
-package ge.tbc.tbcitacademy.Steps;
+package ge.tbc.tbcitacademy.Steps.PetstoreSteps;
 
 import ge.tbc.tbcitacademy.Data.Constants;
 import io.restassured.RestAssured;
@@ -28,7 +28,7 @@ public class PetstoreSteps {
                 .given()
                 .formParams("petId", petId,
                         "name", "manuchar",
-                        "status", "changed")
+                        "status", "sold")
                 .accept(Constants.responseFormat)
                 .when()
                 .post("/pet/{petId}", petId);

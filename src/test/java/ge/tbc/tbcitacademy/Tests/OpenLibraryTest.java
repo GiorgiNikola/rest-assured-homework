@@ -1,7 +1,6 @@
 package ge.tbc.tbcitacademy.Tests;
 
-import ge.tbc.tbcitacademy.Steps.BookstoreSteps;
-import ge.tbc.tbcitacademy.Steps.OpenLibrarySteps;
+import ge.tbc.tbcitacademy.Steps.OpenLibrarySteps.OpenLibrarySteps;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

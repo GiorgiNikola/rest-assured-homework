@@ -1,4 +1,4 @@
-package ge.tbc.tbcitacademy.Steps;
+package ge.tbc.tbcitacademy.Steps.OpenLibrarySteps;
 
 import ge.tbc.tbcitacademy.Data.Constants;
 import io.restassured.RestAssured;

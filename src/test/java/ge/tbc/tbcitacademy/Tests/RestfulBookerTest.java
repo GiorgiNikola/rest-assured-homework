@@ -32,6 +32,7 @@ public class RestfulBookerTest {
         Response updateResponse = updateBookingSteps
                 .updateBooking(requestSpec, info, token);
         int statusCode = updateBookingSteps.returnStatusCode(updateResponse);
+        //updateResponse.then().log().all();
     }
 
 }

@@ -1,10 +1,8 @@
-package ge.tbc.tbcitacademy.Models.Requests.RestfulBooker;
+package ge.tbc.tbcitacademy.Models.Responses.RestfulBooker;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"firstname", "lastname", "totalprice", "depositpaid", "bookingdates", "additionalneeds"})
-public class UpdateBookingRequest{
+public class Booking{
 
 	@JsonProperty("firstname")
 	private String firstname;
@@ -13,7 +11,7 @@ public class UpdateBookingRequest{
 	private String additionalneeds;
 
 	@JsonProperty("bookingdates")
-	private BookingDates bookingdates;
+	private Bookingdates bookingdates;
 
 	@JsonProperty("totalprice")
 	private int totalprice;
@@ -40,11 +38,11 @@ public class UpdateBookingRequest{
 		return additionalneeds;
 	}
 
-	public void setBookingdates(BookingDates bookingdates){
+	public void setBookingdates(Bookingdates bookingdates){
 		this.bookingdates = bookingdates;
 	}
 
-	public BookingDates getBookingdates(){
+	public Bookingdates getBookingdates(){
 		return bookingdates;
 	}
 

@@ -1,6 +1,7 @@
 package ge.tbc.tbcitacademy.Steps.BookstoreSteps;
 
 import ge.tbc.tbcitacademy.Data.Constants;
+import ge.tbc.tbcitacademy.Models.Responses.Bookstore.BooksResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -13,13 +14,18 @@ public class BookstoreSteps {
     }
 
     public Response getAllBook(){
-        Response response = RestAssured
+        return RestAssured
                 .given()
                 .accept(Constants.responseFormat)
                 .when()
                 .get("/Books");
+    }
 
-        return response;
+    public BooksResponse getBooks(Response response){
+        return response
+                .then()
+                .extract()
+                .as(BooksResponse.class);
     }
 
     public String extractData(Map<String, Object> book, String key){

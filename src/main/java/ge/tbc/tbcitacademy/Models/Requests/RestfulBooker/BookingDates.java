@@ -2,7 +2,7 @@ package ge.tbc.tbcitacademy.Models.Requests.RestfulBooker;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Bookingdates{
+public class BookingDates{
 
 	@JsonProperty("checkin")
 	private String checkin;

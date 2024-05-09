@@ -27,7 +27,7 @@ public class PetstoreSteps {
         return RestAssured
                 .given()
                 .formParams("petId", petId,
-                        "name", "manuchar",
+                        "name", Constants.username,
                         "status", "sold")
                 .accept(Constants.responseFormat)
                 .when()

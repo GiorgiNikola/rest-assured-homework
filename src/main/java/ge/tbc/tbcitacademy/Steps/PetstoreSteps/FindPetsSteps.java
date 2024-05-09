@@ -1,13 +1,18 @@
 package ge.tbc.tbcitacademy.Steps.PetstoreSteps;
 
+import ge.tbc.tbcitacademy.Data.Status;
+import ge.tbc.tbcitacademy.Models.Requests.Petstore.Pet;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.hamcrest.Matchers;
 import org.json.JSONObject;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
 
 public class FindPetsSteps {
@@ -15,29 +20,29 @@ public class FindPetsSteps {
     public Response findPets(RequestSpecification requestSpec){
         return RestAssured
                 .given(requestSpec)
-                .queryParam("status", "available")
+                .queryParam("status", Status.AVAILABLE.getValue())
                 .when()
                 .get("/pet/findByStatus");
     }
 
     public FindPetsSteps validateArrayContainsPet(Response response){
-        response
-                .then()
-                .body("id", Matchers.hasItem(8000));
+        List<Pet> pets = response.then().extract().body().jsonPath().getList("", Pet.class);
+        assertThat(pets, hasItem(hasProperty("id", equalTo(8000L))));
         return this;
     }
 
-    public JSONObject returnPetObject(Response response){
-        LinkedHashMap<String, Object> petMap = response
-                .jsonPath()
-                .getJsonObject("find { it.id == 8000 }");
-        return new JSONObject(petMap);
+    public Pet returnPetObject(Response response){
+        return response.jsonPath()
+                .getObject("find { it.id == 8000 }", Pet.class);
     }
 
-    public FindPetsSteps validateExtractedPet(JSONObject petObject, JSONObject requestBody){
-        assertEquals(petObject.getLong("id"), requestBody.getLong("id"));
-        assertEquals(petObject.getString("name"), requestBody.getString("name"));
-        assertEquals(petObject.getString("status"), requestBody.getString("status"));
+    public FindPetsSteps validateExtractedPet(Pet petObject, Pet requestBody){
+//        assertEquals(petObject.getLong("id"), requestBody.getLong("id"));
+//        assertEquals(petObject.getString("name"), requestBody.getString("name"));
+//        assertEquals(petObject.getString("status"), requestBody.getString("status"));
+        assertThat(petObject.getId(), equalTo(requestBody.getId()));
+        assertThat(petObject.getName(), equalTo(requestBody.getName()));
+        assertThat(petObject.getStatus(), equalTo(requestBody.getStatus()));
         return this;
     }
 }

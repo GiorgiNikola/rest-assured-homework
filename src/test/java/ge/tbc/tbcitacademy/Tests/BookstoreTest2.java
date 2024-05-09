@@ -1,5 +1,6 @@
 package ge.tbc.tbcitacademy.Tests;
 
+import ge.tbc.tbcitacademy.Models.Responses.Bookstore.BooksResponse;
 import ge.tbc.tbcitacademy.Steps.BookstoreSteps.BookstoreSteps;
 import ge.tbc.tbcitacademy.Steps.BookstoreSteps.BookstoreValidationSteps;
 import io.restassured.response.Response;
@@ -20,8 +21,11 @@ public class BookstoreTest2 {
     public void validationsTest(){
         Response response = bookstoreSteps
                 .getAllBook();
+        BooksResponse booksResponse = bookstoreSteps
+                .getBooks(response);
         bookstoreValidationSteps
-                .validatePages(response)
-                .validateAuthors(response);
+                .validatePages(booksResponse)
+                .validateFirstAndSecondAuthor(booksResponse)
+                .validateLastTwoAuthors(booksResponse);
     }
 }

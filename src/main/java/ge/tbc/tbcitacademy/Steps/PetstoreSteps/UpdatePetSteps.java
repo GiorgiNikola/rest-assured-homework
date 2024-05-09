@@ -1,13 +1,15 @@
 package ge.tbc.tbcitacademy.Steps.PetstoreSteps;
 
+import ge.tbc.tbcitacademy.Models.Responses.Petstore.UploadImageResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.hamcrest.Matchers;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 public class UpdatePetSteps {
     public Response updatePetImage(RequestSpecification requestSpec, int petId, String metaData, File file){
@@ -21,12 +23,11 @@ public class UpdatePetSteps {
     }
 
     public UpdatePetSteps validatePetWithImage(Response response, String metaData, File pictureFile){
-        response
-                .then()
-                .statusCode(200)
-                .body("message", Matchers.containsString(metaData),
-                        "message", Matchers.containsString(pictureFile.getName()),
-                        "message", Matchers.containsString(pictureFile.length() + " bytes"));
+        UploadImageResponse uploadImageResponse =
+                response.then().statusCode(200).extract().as(UploadImageResponse.class);
+        assertThat(uploadImageResponse.getMessage(), containsString(metaData));
+        assertThat(uploadImageResponse.getMessage(), containsString(pictureFile.getName()));
+        assertThat(uploadImageResponse.getMessage(), containsString(pictureFile.length() + " bytes"));
         return this;
     }
 }

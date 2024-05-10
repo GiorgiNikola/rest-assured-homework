@@ -37,9 +37,6 @@ public class FindPetsSteps {
     }
 
     public FindPetsSteps validateExtractedPet(Pet petObject, Pet requestBody){
-//        assertEquals(petObject.getLong("id"), requestBody.getLong("id"));
-//        assertEquals(petObject.getString("name"), requestBody.getString("name"));
-//        assertEquals(petObject.getString("status"), requestBody.getString("status"));
         assertThat(petObject.getId(), equalTo(requestBody.getId()));
         assertThat(petObject.getName(), equalTo(requestBody.getName()));
         assertThat(petObject.getStatus(), equalTo(requestBody.getStatus()));

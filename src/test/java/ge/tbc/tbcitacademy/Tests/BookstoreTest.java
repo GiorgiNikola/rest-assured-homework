@@ -2,7 +2,7 @@ package ge.tbc.tbcitacademy.Tests;
 
 import ge.tbc.tbcitacademy.Data.Constants;
 import ge.tbc.tbcitacademy.DataProvider.CustomDataProvider;
-import ge.tbc.tbcitacademy.Steps.BookstoreSteps;
+import ge.tbc.tbcitacademy.Steps.BookstoreSteps.BookstoreSteps;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

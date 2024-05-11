@@ -19,9 +19,21 @@ public class Constants {
     driverId = "alonso", driverNumber = "14", driverCode = "ALO",
     driverURL = "http://en.wikipedia.org/wiki/Fernando_Alonso",
     driverName = "Fernando", driverFamilyName = "Alonso",
-    driverDateOfBirth = "1981-07-29", driverNationality = "Spanish";
-
+    driverDateOfBirth = "1981-07-29", driverNationality = "Spanish",
+    residentName = "Lobot", swapApiBaseUri = "https://swapi.dev/api",
+    petstore3Uri = "https://petstore3.swagger.io/api/v3",
+    petShipDate = "2023-05-25T10:00:00Z", petStatus = "placed",
+    postPetStatus = "placed", firstname1 = "Keanu", lastname1 = "Reeves",
+    checkIn1 = "2018-01-01", checkOut1 = "2019-01-01", specialNeed1 = "Cake",
+    passportNo = null, restfulBookerUri = "https://restful-booker.herokuapp.com",
+    cookie = "Cookie", tokenTxt = "token=", authorization = "Authorization",
+    authToken = "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+    fakerApiUri = "https://fakerapi.it/api/v1",
+    photoUrl = "photo", xmlFormat = "application/xml";
     public static final int successfulOperationCode = 200,
     unauthorizedOperationCode = 401, petId1 = 123, petId2 = 70000,
-    errorCode = 404;
+    errorCode = 404, Id = 8000, postPetID = 7000, petQuantity = 500,
+    quantity = 300, totalPrice = 333, totalPrice1 = 444,
+    salesPrice = 600, salesPrice1 = 800;
+    public static final boolean depositPaid = false, depositPaid1 = true;
 }

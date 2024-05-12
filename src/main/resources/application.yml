@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:auth
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+server:
+  port: 8086
+application:
+  security:
+    jwt:
+      secret-key: 233E6625841613A7B640C09D5D25FE58241947D38FDBD58E13DD0704BB95E2FB
+      expiration: 900000 #  15 min in ms
+      cookie-name: jwt-cookie
+      refresh-token:
+        expiration: 1296000000 # 15 days in ms
+        cookie-name: refresh-jwt-cookie
+
+springdoc:
+  swagger-ui:
+    url: "/v3/api-docs.yaml"

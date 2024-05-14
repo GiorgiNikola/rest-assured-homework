@@ -21,10 +21,11 @@ public class RegistrationSteps {
     RefreshTokenResponse refTokenResponse;
 
     @Step("Generate registration request body")
-    public RegistrationSteps generateRequestBody(String email, String password){
+    public RegistrationSteps generateRequestBody(String firstname, String lastname
+            ,String email, String password){
         registerRequest = new RegisterRequest()
-                .firstname(Constants.username)
-                .lastname(Constants.lastname)
+                .firstname(firstname)
+                .lastname(lastname)
                 .email(email)
                 .password(password)
                 .role(RegisterRequest.RoleEnum.ADMIN);

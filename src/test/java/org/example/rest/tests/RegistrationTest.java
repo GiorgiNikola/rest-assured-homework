@@ -45,9 +45,9 @@ public class RegistrationTest {
             "to get resource and validate it then refresh token and validate old token")
     @Test(dataProvider = "userCredentialProvider", dataProviderClass = CustomDataProvider.class,
     description = "Registration, authentication, authorization and token refreshing")
-    public void registrationTest(String email, String password){
+    public void registrationTest(String firstname, String lastname,String email, String password){
         registrationSteps
-                .generateRequestBody(email, password)
+                .generateRequestBody(firstname, lastname, email, password)
                 .registerUser(api)
                 .authenticate(api)
                 .validateAuthentication()

@@ -2,7 +2,7 @@ package org.example.rest.pom.Data;
 
 public class Constants {
     public static final String resourceMessage = "Hello, you have access to a protected resource " +
-            "that requires admin role and read authority.", username = "Giorgi",
+            "that requires admin role and read authority.", validPassword = "P@ssw0rd",
             lastname = "Nikoladze", updatePrivilege = "UPDATE_PRIVILEGE",
             deletePrivilege = "DELETE_PRIVILEGE", readPrivilege = "READ_PRIVILEGE",
             writePrivilege = "WRITE_PRIVILEGE", adminPrivilege = "ROLE_ADMIN",

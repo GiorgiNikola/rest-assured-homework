@@ -24,7 +24,7 @@ public class CountryInfoServiceTest {
     @Description("This test case validates various aspects of the continent" +
             " information retrieved from the Country Info Service.")
     @Test(description = "Validate Continent Information")
-    public void continentTest() throws JAXBException {
+    public void continentTest() {
         continentSteps
                 .serializeRequest()
                 .sendRequest()

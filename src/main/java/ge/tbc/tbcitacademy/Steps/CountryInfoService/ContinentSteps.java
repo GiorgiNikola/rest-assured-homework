@@ -21,7 +21,7 @@ public class ContinentSteps {
     List<String> sNames;
     List<String> sCodes;
     @Step("Serialize soap request body")
-    public ContinentSteps serializeRequest() throws JAXBException {
+    public ContinentSteps serializeRequest() {
         ObjectFactory objectFactory = new ObjectFactory();
         ListOfContinentsByName requestObject = objectFactory.createListOfContinentsByName();
         body = Marshall.marshallSoapRequest(requestObject);

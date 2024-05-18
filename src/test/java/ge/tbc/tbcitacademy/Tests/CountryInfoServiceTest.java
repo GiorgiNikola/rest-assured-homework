@@ -28,6 +28,7 @@ public class CountryInfoServiceTest {
         continentSteps
                 .serializeRequest()
                 .sendRequest()
+                .deserializeResponse()
                 .initialiseLists()
                 .validateCount()
                 .validateNames()

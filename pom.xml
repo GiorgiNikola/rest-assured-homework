@@ -145,6 +145,21 @@
             <artifactId>jakarta.xml.soap-api</artifactId>
             <version>3.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.cxf.xjc-utils</groupId>
+            <artifactId>cxf-xjc-runtime</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf.xjcplugins</groupId>
+            <artifactId>cxf-xjc-ts</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-value-constructor</artifactId>
+            <version>3.0</version>
+        </dependency>
 
     </dependencies>
 
@@ -207,13 +222,31 @@
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
+                            <additionalJvmArgs>-Djavax.xml.accessExternalDTD=all -Djavax.xml.accessExternalSchema=all</additionalJvmArgs>
                             <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${project.basedir}/src/main/resources/CountryInfoService.wso</wsdl>
+                                    <extraargs>
+                                        <extraarg>-xjc-Xfluent-api</extraarg>
+                                    </extraargs>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${project.basedir}/src/main/resources/employees.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-xjc-Xfluent-api</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${project.basedir}/src/main/resources/SOAP.Demo.CLS</wsdl>
+                                    <extraargs>
+                                        <extraarg>-xjc-Xfluent-api</extraarg>
+                                    </extraargs>
+                                    <bindingFiles>
+                                        <bindingFile>
+                                            https://www.w3.org/2001/XMLSchema.xsd
+                                        </bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
@@ -222,7 +255,36 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <!-- https://mvnrepository.com/artifact/org.jvnet.jaxb2_commons/jaxb2-fluent-api -->
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-fluent-api</artifactId>
+                        <version>3.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.cxf.xjc-utils</groupId>
+                        <artifactId>cxf-xjc-runtime</artifactId>
+                        <version>4.0.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.cxf.xjcplugins</groupId>
+                        <artifactId>cxf-xjc-ts</artifactId>
+                        <version>4.0.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-value-constructor</artifactId>
+                        <version>3.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                        <version>3.13.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
+
         </plugins>
     </build>
 

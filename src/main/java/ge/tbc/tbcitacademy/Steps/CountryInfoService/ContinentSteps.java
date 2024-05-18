@@ -1,16 +1,20 @@
 package ge.tbc.tbcitacademy.Steps.CountryInfoService;
 
 import ge.tbc.tbcitacademy.Data.Constants;
-import ge.tbc.tbcitacademy.Util.Marshall;
+import ge.tbc.tbcitacademy.Steps.CommonSteps.Marshall;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
-import jakarta.xml.bind.JAXBException;
 import org.hamcrest.Matchers;
 import org.oorsprong.websamples.ListOfContinentsByName;
+import org.oorsprong.websamples.ListOfContinentsByNameResponse;
 import org.oorsprong.websamples.ObjectFactory;
+import org.oorsprong.websamples.TContinent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static ge.tbc.tbcitacademy.Steps.CommonSteps.SoapServiceSender.send;
+import static ge.tbc.tbcitacademy.Steps.CommonSteps.Unmarshall.unmarshallResponse;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -18,6 +22,7 @@ import static org.hamcrest.Matchers.*;
 public class ContinentSteps {
     String body;
     Response response;
+    ListOfContinentsByNameResponse continentsByNameResponse;
     List<String> sNames;
     List<String> sCodes;
     @Step("Serialize soap request body")
@@ -30,18 +35,27 @@ public class ContinentSteps {
 
     @Step("Send request to service and get response")
     public ContinentSteps sendRequest(){
-        response = given()
-                .header("Content-Type", "text/xml; charset=utf-8")
-                .header("SOAPAction", Constants.listOfContinentsByNameAction)
-                .body(body)
-                .post(Constants.countryInfoServiceUri);
+        response = send(Constants.countryInfoServiceUri,Constants.listOfContinentsByNameAction, body);
+        return this;
+    }
+
+    @Step("Deserialize response into object")
+    public ContinentSteps deserializeResponse(){
+        continentsByNameResponse = unmarshallResponse(response.asString(), ListOfContinentsByNameResponse.class);
         return this;
     }
 
     @Step("Initialise sName and sCode lists")
     public ContinentSteps initialiseLists(){
-        sNames = response.xmlPath().getList( Constants.basePath + ".sName");
-        sCodes = response.xmlPath().getList( Constants.basePath + ".sCode");
+        sNames = continentsByNameResponse.getListOfContinentsByNameResult()
+                .getTContinent()
+                .stream()
+                .map(TContinent::getSName)
+                .collect(Collectors.toList());
+        sCodes = continentsByNameResponse.getListOfContinentsByNameResult()
+                .getTContinent()
+                .stream()
+                .map(TContinent::getSCode).collect(Collectors.toList());
         return this;
     }
 
@@ -59,7 +73,12 @@ public class ContinentSteps {
 
     @Step("Validate sName node result with value of sCode equals to AN")
     public ContinentSteps validateAntarctica(){
-        String sName = response.xmlPath().get(Constants.basePath + ".find { it.sCode == 'AN' }.sName");
+        String sName = continentsByNameResponse.getListOfContinentsByNameResult()
+                .getTContinent()
+                .stream()
+                .filter(continent -> continent.getSCode().equals("AN"))
+                .findFirst()
+                .map(TContinent::getSName).get();
         assertThat(sName, equalTo(Constants.antarctica));
         return this;
     }
@@ -115,21 +134,37 @@ public class ContinentSteps {
 
     @Step("find `sCode` that starting with `O` and ensure that is `Ocenania`")
     public ContinentSteps validateOceania(){
-        String sName = response.xmlPath().get(Constants.basePath + ".find { it.sCode.text().startsWith('O') }.sName");
+
+        String sName = continentsByNameResponse.getListOfContinentsByNameResult()
+                .getTContinent()
+                .stream()
+                .filter(continent -> continent.getSCode().startsWith("O"))
+                .map(TContinent::getSName)
+                .findFirst().get();
         assertThat(sName, equalTo(Constants.ocenania));
         return this;
     }
 
     @Step("findAll `sName` that stars with `A` and ends with `ca`")
     public ContinentSteps findAllSName(){
-        List<String> sNames = response.xmlPath().getList(Constants.basePath + ".findAll { it.sName.text().startsWith('A') && it.sName.text().endsWith('ca') }.sName");
+        List<String> sNames = continentsByNameResponse.getListOfContinentsByNameResult()
+                .getTContinent()
+                .stream()
+                .filter(continent -> continent.getSName().startsWith("A") && continent.getSName().endsWith("ca"))
+                .map(TContinent::getSName)
+                .collect(Collectors.toList());
         assertThat(sNames, hasItems(Constants.filteredSNames));
         return this;
     }
 
     @Step("No Numeric Characters in `sName`")
     public ContinentSteps noNumericCharacters(){
-        List<String> sNames = response.xmlPath().getList(Constants.basePath + ".findAll { !(it.sName.text() =~ /\\d/) }.sName");
+        List<String> sNames = continentsByNameResponse.getListOfContinentsByNameResult()
+                .getTContinent()
+                .stream()
+                .map(TContinent::getSName)
+                .filter(sName -> !sName.matches(".*\\\\d.*"))
+                .toList();
         assertThat(sNames.size(), equalTo(6));
         return this;
     }

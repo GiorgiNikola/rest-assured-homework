@@ -1,6 +1,7 @@
 package ge.tbc.tbcitacademy.Steps.SpringBootSoap;
 
 import com.example.springboot.soap.interfaces.AddEmployeeRequest;
+import com.example.springboot.soap.interfaces.AddEmployeeResponse;
 import com.example.springboot.soap.interfaces.EmployeeInfo;
 import com.example.springboot.soap.interfaces.ObjectFactory;
 import ge.tbc.tbcitacademy.Data.Constants;
@@ -13,57 +14,53 @@ import javax.xml.datatype.DatatypeFactory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import static ge.tbc.tbcitacademy.Util.Marshall.marshallSoapRequest;
+import static ge.tbc.tbcitacademy.Steps.CommonSteps.Marshall.marshallSoapRequest;
+import static ge.tbc.tbcitacademy.Steps.CommonSteps.SoapServiceSender.send;
+import static ge.tbc.tbcitacademy.Steps.CommonSteps.Unmarshall.unmarshallResponse;
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.XmlConfig.xmlConfig;
-import static org.hamcrest.Matchers.hasXPath;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class AddEmployeeSteps {
     Response response;
     String body;
+    AddEmployeeResponse addEmployeeResponse;
     @Step("Generate add request body")
-    public AddEmployeeSteps createAddRequestBody() {
+    public AddEmployeeSteps createAddRequestBody() throws DatatypeConfigurationException {
         ObjectFactory objectFactory = new ObjectFactory();
         AddEmployeeRequest employeeRequest = objectFactory.createAddEmployeeRequest();
-        EmployeeInfo employeeInfo = objectFactory.createEmployeeInfo();
-        employeeInfo.setEmployeeId(Constants.employeeId);
-        employeeInfo.setName(Constants.name);
-        employeeInfo.setAddress(Constants.address);
-        employeeInfo.setEmail(Constants.email);
-        employeeInfo.setDepartment(Constants.department);
-        try {
-            employeeInfo.setBirthDate(DatatypeFactory.newInstance()
-                    .newXMLGregorianCalendar(LocalDate.of(Constants.birthYear, Constants.birthMonth, Constants.birthDay).toString()));
-        } catch (DatatypeConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-        employeeInfo.setPhone(Constants.phone);
-        employeeInfo.setSalary(BigDecimal.valueOf(Constants.salary));
-        employeeRequest.setEmployeeInfo(employeeInfo);
+        EmployeeInfo employeeInfo = objectFactory.createEmployeeInfo()
+                .withEmployeeId(Constants.employeeId)
+                .withName(Constants.name)
+                .withAddress(Constants.address)
+                .withEmail(Constants.email)
+                .withDepartment(Constants.department)
+                .withBirthDate(DatatypeFactory.newInstance()
+                        .newXMLGregorianCalendar(LocalDate.of(Constants.birthYear, Constants.birthMonth, Constants.birthDay).toString()))
+                .withPhone(Constants.phone)
+                .withSalary(BigDecimal.valueOf(Constants.salary));
+        employeeRequest
+                .withEmployeeInfo(employeeInfo);
         body = marshallSoapRequest(employeeRequest);
         return this;
     }
 
     @Step("Send request with body and get response")
     public AddEmployeeSteps sendAddEmployeeRequest(){
-        response = given()
-                .config(RestAssured.config().xmlConfig(xmlConfig()
-                        .declareNamespace("ns2", Constants.ns2NameSpace)
-                        .declareNamespace("SOAP-ENV", Constants.soapEnvNameSpace)))
-                .header("Content-Type", "text/xml; charset=utf-8")
-                .header("SOAPAction", Constants.addEmployeeAction)
-                .body(body)
-                .post(Constants.baseUri);
+        response = send(Constants.baseUri, Constants.addEmployeeAction, body);
+        return this;
+    }
+
+    @Step("Deserialize response into object")
+    public AddEmployeeSteps deserializeResponse(){
+        addEmployeeResponse = unmarshallResponse(response.asString(), AddEmployeeResponse.class);
         return this;
     }
 
     @Step("Validate message in response")
     public AddEmployeeSteps validateAddEmployeeResponse() {
-        response
-                .then()
-                .statusCode(200)
-                .body(hasXPath("//*[local-name()='message' and namespace-uri()='" + Constants.ns2NameSpace +"']" +
-                        "[text()='" + Constants.contentAddedSuccessfully + "']"));
+        assertThat(addEmployeeResponse.getServiceStatus().getMessage(), equalTo(Constants.contentAddedSuccessfully));
         return this;
     }
 }

@@ -1,4 +1,4 @@
-package ge.tbc.tbcitacademy.Util;
+package ge.tbc.tbcitacademy.Steps.CommonSteps;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
